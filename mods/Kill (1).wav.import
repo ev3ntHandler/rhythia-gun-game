@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://boppbsf1ok51a"
+path="res://.godot/imported/Kill (1).wav-b4c4a40466f8d5bb85657bd579b63dbd.sample"
+
+[deps]
+
+source_file="res://mods/Kill (1).wav"
+dest_files=["res://.godot/imported/Kill (1).wav-b4c4a40466f8d5bb85657bd579b63dbd.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

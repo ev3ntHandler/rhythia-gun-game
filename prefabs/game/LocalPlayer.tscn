@@ -1,0 +1,480 @@
+[gd_scene load_steps=43 format=3 uid="uid://cbxyhhh3udi40"]
+
+[ext_resource type="Script" path="res://scripts/game/map/objects/PlayerObject.gd" id="1_fwd1t"]
+[ext_resource type="Texture2D" uid="uid://ctmjd7r2b7750" path="res://assets/images/default_cursor.png" id="2_xfjp0"]
+[ext_resource type="PackedScene" uid="uid://nn88aauovxnv" path="res://mods/MachineGun.glb" id="3_ksuba"]
+[ext_resource type="Script" path="res://mods/MachineGun.gd" id="4_s7pdq"]
+[ext_resource type="Texture2D" uid="uid://d5lbcjtus2pd" path="res://mods/smoke_07.png" id="5_gdop0"]
+[ext_resource type="Texture2D" uid="uid://d17kcc7538p01" path="res://mods/muzzle_01.png" id="6_1fclc"]
+[ext_resource type="AudioStream" uid="uid://5v2u00cfi6rv" path="res://mods/S_RS_StationaryGun3_Fire_RIGHT.wav" id="7_to6kc"]
+[ext_resource type="AudioStream" uid="uid://3jc6iqden42l" path="res://mods/S_RS_StationaryGun3_Release_RIGHT.wav" id="8_e3qrg"]
+[ext_resource type="AudioStream" uid="uid://v4frfuoxfcjr" path="res://mods/Kill (2).wav" id="9_rrw6e"]
+[ext_resource type="AudioStream" uid="uid://c061tns60br3f" path="res://mods/Kill (0).wav" id="10_7a3vg"]
+[ext_resource type="AudioStream" uid="uid://diwmcmv87cy3l" path="res://mods/Kill (4).wav" id="11_gvalh"]
+[ext_resource type="AudioStream" uid="uid://p8lhnb85w8p1" path="res://mods/Kill (5).wav" id="12_a8pse"]
+[ext_resource type="AudioStream" uid="uid://h3mth73tfvxp" path="res://mods/Kill (6).wav" id="13_7xhew"]
+[ext_resource type="AudioStream" uid="uid://bw13j7oisqfrm" path="res://mods/Kill (7).wav" id="14_r6sgf"]
+[ext_resource type="AudioStream" uid="uid://rmwremtll1p" path="res://mods/Kill (8).wav" id="15_5bue5"]
+[ext_resource type="AudioStream" uid="uid://bxd3wjado0vim" path="res://mods/Kill (9).wav" id="16_altew"]
+[ext_resource type="AudioStream" uid="uid://boppbsf1ok51a" path="res://mods/Kill (1).wav" id="17_a13tn"]
+[ext_resource type="AudioStream" uid="uid://dhc0e027d2t48" path="res://mods/Hitmarker.mp3" id="18_xiqwb"]
+[ext_resource type="PackedScene" uid="uid://iwlpamd20oko" path="res://addons/customizableCrosshair/crosshair/crosshair.tscn" id="19_bmbtd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y2xxy"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_xfjp0")
+
+[sub_resource type="QuadMesh" id="QuadMesh_rq05a"]
+material = SubResource("StandardMaterial3D_y2xxy")
+flip_faces = true
+size = Vector2(0.2, 0.2)
+
+[sub_resource type="MultiMesh" id="MultiMesh_it0w6"]
+transform_format = 1
+use_colors = true
+mesh = SubResource("QuadMesh_rq05a")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ui1ik"]
+size = Vector3(9, 9, 1)
+
+[sub_resource type="Animation" id="Animation_2727l"]
+resource_name = "shoot"
+length = 0.15
+step = 0.05
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.425, -0.423, -0.423, 0.05, 1, 0.425, -0.423, -0.1, 0.15, 1, 0.424833, -0.422965, -0.422922)
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("shootPoint/OmniLight3D:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sh2b1"]
+_data = {
+"shoot": SubResource("Animation_2727l")
+}
+
+[sub_resource type="Curve" id="Curve_j0ubn"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_vysw2"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_yvdnv"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_0w8ev"]
+curve_x = SubResource("Curve_j0ubn")
+curve_y = SubResource("Curve_vysw2")
+curve_z = SubResource("Curve_yvdnv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_acdm7"]
+angle_min = -720.0
+angle_max = 720.0
+direction = Vector3(0, 1, 0)
+spread = 20.0
+initial_velocity_min = 0.1
+initial_velocity_max = 0.5
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveXYZTexture_0w8ev")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1fx16"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 1, 1, 0.105882)
+albedo_texture = ExtResource("5_gdop0")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_7txd7"]
+material = SubResource("StandardMaterial3D_1fx16")
+size = Vector2(0.25, 0.3)
+orientation = 2
+
+[sub_resource type="Curve" id="Curve_pf5f2"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_dt7c3"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_v2nrc"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_k3tia"]
+curve_x = SubResource("Curve_pf5f2")
+curve_y = SubResource("Curve_dt7c3")
+curve_z = SubResource("Curve_v2nrc")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5bowo"]
+particle_flag_rotate_y = true
+angle_min = -720.0
+angle_max = 720.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveXYZTexture_k3tia")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qaagq"]
+transparency = 1
+cull_mode = 2
+shading_mode = 2
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("6_1fclc")
+emission_enabled = true
+emission = Color(1, 0.647059, 0, 1)
+emission_energy_multiplier = 2.57
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_54qbc"]
+material = SubResource("StandardMaterial3D_qaagq")
+size = 0.5
+section_segments = 2
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_7ax2j"]
+random_pitch = 1.2
+streams_count = 2
+stream_0/stream = ExtResource("18_xiqwb")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("18_xiqwb")
+stream_1/weight = 1.0
+
+[sub_resource type="Animation" id="Animation_ele8v"]
+resource_name = "shoot"
+length = 0.17
+step = 0.05
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -0.425, -0.423, -0.423, 0.05, 1, -0.425, -0.423, -0.1, 0.15, 1, -0.425, -0.423, -0.423)
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("shootPoint/OmniLight3D:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l5tv1"]
+_data = {
+"shoot": SubResource("Animation_ele8v")
+}
+
+[node name="Player" type="Node3D" node_paths=PackedStringArray("camera", "cursor")]
+process_priority = 5
+script = ExtResource("1_fwd1t")
+local_player = true
+camera = NodePath("Camera")
+cursor = NodePath("Cursor")
+trail = SubResource("MultiMesh_it0w6")
+id = "Player"
+permanent = true
+
+[node name="MGCollisionPlane" type="Area3D" parent="."]
+
+[node name="MouseCollider" type="CollisionShape3D" parent="MGCollisionPlane"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.502928)
+shape = SubResource("BoxShape3D_ui1ik")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, -3.5)
+cull_mask = 1048543
+fov = 70.0
+
+[node name="MachineGun" parent="Camera" instance=ExtResource("3_ksuba")]
+unique_name_in_owner = true
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0.425, -0.423, -0.423)
+script = ExtResource("4_s7pdq")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Camera/MachineGun"]
+libraries = {
+"": SubResource("AnimationLibrary_sh2b1")
+}
+speed_scale = 6.0
+
+[node name="Smoke" type="GPUParticles3D" parent="Camera/MachineGun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.256932, 0.924598)
+emitting = false
+amount = 16
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_acdm7")
+draw_pass_1 = SubResource("PlaneMesh_7txd7")
+
+[node name="Muzzle" type="GPUParticles3D" parent="Camera/MachineGun"]
+transform = Transform3D(-1, 8.74226e-08, -1.95131e-13, -1.98952e-13, -4.37114e-08, 1, 8.74226e-08, 1, 4.37114e-08, 0, 0.256932, 1.34105)
+emitting = false
+amount = 1
+lifetime = 0.1
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_5bowo")
+draw_pass_1 = SubResource("RibbonTrailMesh_54qbc")
+
+[node name="ShootLoop" type="AudioStreamPlayer3D" parent="Camera/MachineGun"]
+stream = ExtResource("7_to6kc")
+panning_strength = 1.52
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="ShootRelease" type="AudioStreamPlayer3D" parent="Camera/MachineGun"]
+stream = ExtResource("8_e3qrg")
+
+[node name="shootPoint" type="Marker3D" parent="Camera/MachineGun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.274306, 0.965893)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Camera/MachineGun/shootPoint"]
+visible = false
+light_color = Color(1, 0.776471, 0, 1)
+light_energy = 5.727
+omni_range = 1.418
+omni_attenuation = 0.0213444
+
+[node name="Killcounter" type="Node3D" parent="Camera/MachineGun"]
+
+[node name="2" type="AudioStreamPlayer3D" parent="Camera/MachineGun/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("9_rrw6e")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="5" type="AudioStreamPlayer3D" parent="Camera/MachineGun/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("10_7a3vg")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="10" type="AudioStreamPlayer3D" parent="Camera/MachineGun/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("11_gvalh")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="20" type="AudioStreamPlayer3D" parent="Camera/MachineGun/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("12_a8pse")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="50" type="AudioStreamPlayer3D" parent="Camera/MachineGun/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("13_7xhew")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="60" type="AudioStreamPlayer3D" parent="Camera/MachineGun/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("14_r6sgf")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="70" type="AudioStreamPlayer3D" parent="Camera/MachineGun/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("15_5bue5")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="80" type="AudioStreamPlayer3D" parent="Camera/MachineGun/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("16_altew")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="90" type="AudioStreamPlayer3D" parent="Camera/MachineGun/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("17_a13tn")
+volume_db = -4.638
+unit_size = 124.3
+
+[node name="CounterReset" type="Timer" parent="Camera/MachineGun"]
+wait_time = 0.5
+one_shot = true
+
+[node name="Hit" type="AudioStreamPlayer3D" parent="Camera/MachineGun"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = SubResource("AudioStreamRandomizer_7ax2j")
+unit_size = 25.0
+
+[node name="MachineGun2" parent="Camera" instance=ExtResource("3_ksuba")]
+unique_name_in_owner = true
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.425, -0.423, -0.423)
+script = ExtResource("4_s7pdq")
+
+[node name="Smoke" type="GPUParticles3D" parent="Camera/MachineGun2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.256932, 0.924598)
+emitting = false
+amount = 16
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_acdm7")
+draw_pass_1 = SubResource("PlaneMesh_7txd7")
+
+[node name="Muzzle" type="GPUParticles3D" parent="Camera/MachineGun2"]
+transform = Transform3D(-1, 8.74226e-08, -1.95131e-13, -1.98952e-13, -4.37114e-08, 1, 8.74226e-08, 1, 4.37114e-08, 0, 0.256932, 1.34105)
+emitting = false
+amount = 1
+lifetime = 0.1
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_5bowo")
+draw_pass_1 = SubResource("RibbonTrailMesh_54qbc")
+
+[node name="ShootLoop" type="AudioStreamPlayer3D" parent="Camera/MachineGun2"]
+stream = ExtResource("7_to6kc")
+panning_strength = 1.52
+attenuation_filter_cutoff_hz = 20500.0
+
+[node name="ShootRelease" type="AudioStreamPlayer3D" parent="Camera/MachineGun2"]
+stream = ExtResource("8_e3qrg")
+
+[node name="shootPoint" type="Marker3D" parent="Camera/MachineGun2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.274306, 0.965893)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Camera/MachineGun2/shootPoint"]
+visible = false
+light_color = Color(1, 0.776471, 0, 1)
+light_energy = 5.727
+omni_range = 1.418
+omni_attenuation = 0.0213444
+
+[node name="Killcounter" type="Node3D" parent="Camera/MachineGun2"]
+
+[node name="2" type="AudioStreamPlayer3D" parent="Camera/MachineGun2/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("9_rrw6e")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="5" type="AudioStreamPlayer3D" parent="Camera/MachineGun2/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("10_7a3vg")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="10" type="AudioStreamPlayer3D" parent="Camera/MachineGun2/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("11_gvalh")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="20" type="AudioStreamPlayer3D" parent="Camera/MachineGun2/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("12_a8pse")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="50" type="AudioStreamPlayer3D" parent="Camera/MachineGun2/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("13_7xhew")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="60" type="AudioStreamPlayer3D" parent="Camera/MachineGun2/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("14_r6sgf")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="70" type="AudioStreamPlayer3D" parent="Camera/MachineGun2/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("15_5bue5")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="80" type="AudioStreamPlayer3D" parent="Camera/MachineGun2/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("16_altew")
+volume_db = -4.638
+unit_size = 25.0
+
+[node name="90" type="AudioStreamPlayer3D" parent="Camera/MachineGun2/Killcounter"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = ExtResource("17_a13tn")
+volume_db = -4.638
+unit_size = 124.3
+
+[node name="CounterReset" type="Timer" parent="Camera/MachineGun2"]
+wait_time = 0.5
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Camera/MachineGun2"]
+libraries = {
+"": SubResource("AnimationLibrary_l5tv1")
+}
+speed_scale = 6.0
+
+[node name="Hit" type="AudioStreamPlayer3D" parent="Camera/MachineGun2"]
+transform = Transform3D(1, -1.74846e-07, -7.64274e-15, 1.74846e-07, 1, 0, 7.64274e-15, 0, 1, -7.38595e-07, 8.02179, 3.50644e-07)
+stream = SubResource("AudioStreamRandomizer_7ax2j")
+unit_size = 25.0
+
+[node name="AbsCamera" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -3.5)
+cull_mask = 1048543
+fov = 70.0
+
+[node name="Cursor" type="Node3D" parent="."]
+visible = false
+
+[node name="Real" type="MeshInstance3D" parent="Cursor"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+layers = 2
+cast_shadow = 0
+gi_mode = 0
+mesh = SubResource("QuadMesh_rq05a")
+
+[node name="Ghost" type="MeshInstance3D" parent="Cursor"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+layers = 2
+transparency = 1.0
+cast_shadow = 0
+gi_mode = 0
+mesh = SubResource("QuadMesh_rq05a")
+
+[node name="CursorTrail" type="MultiMeshInstance3D" parent="."]
+top_level = true
+layers = 2
+sorting_offset = -1.0
+material_override = SubResource("StandardMaterial3D_y2xxy")
+cast_shadow = 0
+gi_mode = 0
+multimesh = SubResource("MultiMesh_it0w6")
+
+[node name="crosshair" parent="." instance=ExtResource("19_bmbtd")]
+crosshairThickness = 1.0
+crosshairSize = 15.0
+crosshairGap = 5.0
+crosshairColor = Color(1, 1, 1, 1)
+crosshairDot = true
+crosshairTStyle = true
+crosshairOutline = true
+crosshairOutlineThickness = 2.0
+
+[connection signal="animation_finished" from="Camera/MachineGun/AnimationPlayer" to="Camera/MachineGun" method="_on_animation_player_animation_finished"]
+[connection signal="timeout" from="Camera/MachineGun/CounterReset" to="Camera/MachineGun" method="_on_counter_reset_timeout"]
+[connection signal="timeout" from="Camera/MachineGun2/CounterReset" to="Camera/MachineGun2" method="_on_counter_reset_timeout"]

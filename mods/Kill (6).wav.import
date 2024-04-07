@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://h3mth73tfvxp"
+path="res://.godot/imported/Kill (6).wav-4f830b53f4c1b3546f3542b1f666591b.sample"
+
+[deps]
+
+source_file="res://mods/Kill (6).wav"
+dest_files=["res://.godot/imported/Kill (6).wav-4f830b53f4c1b3546f3542b1f666591b.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
